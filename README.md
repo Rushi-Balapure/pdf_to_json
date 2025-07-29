@@ -23,7 +23,7 @@ The system extracts structured information from PDF documents while preserving d
 - **Cross-platform CPU support**: AMD64 compatible, runs purely on CPU.
 
 ## JSON Output Example
-
+```json
 {
 "title": "Document Title Here",
 "outline": [
@@ -34,7 +34,7 @@ The system extracts structured information from PDF documents while preserving d
 "processing_time": 2.34,
 "page_count": 50
 }
-
+```
 
 ## Getting Started
 
@@ -46,23 +46,23 @@ The system extracts structured information from PDF documents while preserving d
 ### Building the Docker Image
 
 You can build the extraction system Docker image with the provided build script:
-
+```bash
 chmod +x build.sh
 ./build.sh
-
+```
 
 This builds the Docker container optimized for CPU-only usage and minimal size.
 
 ### Running the Extraction
 
 To extract text from a PDF, mount your PDF directory and run:
-
+```bash
 docker run --rm -v /path/to/pdfs:/pdfs pdf-extractor:latest /pdfs/document.pdf
-
+```
 The output JSON is printed to stdout. To save the output to a file:
-
+```bash
 docker run --rm -v /path/to/pdfs:/pdfs pdf-extractor:latest /pdfs/document.pdf > output.json
-
+```
 
 ## System Architecture
 
