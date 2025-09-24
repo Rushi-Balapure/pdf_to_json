@@ -41,7 +41,7 @@ class PDFStructureExtractor:
         font_histogram = defaultdict(int)
         total_chars = 0
 
-        for page_num in range(min(len(doc), 10)):  # Sample first 10 pages for speed
+        for page_num in range(min(len(doc), 10)):
             page = doc[page_num]
             blocks = page.get_text("dict")["blocks"]
 
@@ -58,22 +58,87 @@ class PDFStructureExtractor:
                             total_chars += char_count
 
         # Determine heading levels based on frequency and size
-        sorted_fonts = sorted(font_histogram.items(), key=lambda x: x[0], reverse=True)
-
-        # Main text is likely the most frequent font size
-        if sorted_fonts:
+        heading_levels = {}
+        if font_histogram:
+            sorted_fonts_desc = sorted(font_histogram.items(), key=lambda x: x[0], reverse=True)
             main_font_size = max(font_histogram.items(), key=lambda x: x[1])[0]
-
-            heading_levels = {}
-            level = 1
-
-            for font_size, count in sorted_fonts:
-                # Consider as heading if font is larger than main text and not too rare
+            level_index = 1
+            for font_size, count in sorted_fonts_desc:
                 if font_size > main_font_size and count > total_chars * 0.001:
-                    heading_levels[font_size] = f"H{min(level, 6)}"
-                    level += 1
+                    heading_levels[font_size] = f"H{min(level_index, 6)}"
+                    level_index += 1
 
         return font_histogram, heading_levels
+
+    def _iter_lines(self, doc: fitz.Document):
+        """Yield lines with their concatenated text, max font size, and y-position bounds."""
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            blocks = page.get_text("dict")["blocks"]
+            for block in blocks:
+                if "lines" not in block:
+                    continue
+                for line in block["lines"]:
+                    line_text = ""
+                    line_font_size = 0.0
+                    top_y = None
+                    bottom_y = None
+                    for span in line["spans"]:
+                        if span["text"].strip():
+                            line_text += span["text"]
+                            line_font_size = max(line_font_size, float(span["size"]))
+                            bbox = span.get("bbox")
+                            if bbox:
+                                span_top = bbox[1]
+                                span_bottom = bbox[3]
+                                top_y = span_top if top_y is None else min(top_y, span_top)
+                                bottom_y = span_bottom if bottom_y is None else max(bottom_y, span_bottom)
+                    if line_text.strip():
+                        yield {
+                            "page": page_num,
+                            "text": line_text.strip(),
+                            "font_size": round(line_font_size, 1),
+                            "top": top_y,
+                            "bottom": bottom_y,
+                        }
+
+    def _classify_level(self, line_font_size: float, heading_levels: Dict[float, str]) -> Optional[str]:
+        """Return heading level like 'H1'..'H6' if font size matches, else None."""
+        return heading_levels.get(round(line_font_size, 1))
+
+    def _group_paragraphs(self, lines: List[Dict[str, Any]], gap_multiplier: float = 0.8) -> List[List[Dict[str, Any]]]:
+        """Group consecutive lines into paragraphs based on vertical gaps.
+
+        gap_multiplier defines sensitivity relative to the current line's font size.
+        """
+        paragraphs: List[List[Dict[str, Any]]] = []
+        current: List[Dict[str, Any]] = []
+
+        prev_bottom = None
+        for ln in lines:
+            if prev_bottom is None:
+                current = [ln]
+                prev_bottom = ln.get("bottom")
+                continue
+
+            top = ln.get("top")
+            font_size = ln.get("font_size") or 0.0
+            # Heuristic threshold: if the gap is larger than k * font_size, start a new paragraph
+            threshold = (font_size or 10.0) * gap_multiplier
+            gap = (top - prev_bottom) if (top is not None and prev_bottom is not None) else threshold + 1
+
+            if gap is not None and gap > threshold:
+                if current:
+                    paragraphs.append(current)
+                current = [ln]
+            else:
+                current.append(ln)
+            prev_bottom = ln.get("bottom")
+
+        if current:
+            paragraphs.append(current)
+
+        return paragraphs
 
     def extract_text_with_structure(self, pdf_path: str) -> Dict[str, Any]:
         """
@@ -92,47 +157,39 @@ class PDFStructureExtractor:
             title = self._extract_title(doc, heading_levels)
 
             # Extract structured content
-            outline = []
-            current_section = None
+            sections: List[Dict[str, Any]] = []
+            current_section: Optional[Dict[str, Any]] = None
 
-            for page_num in range(len(doc)):
-                page = doc[page_num]
-                blocks = page.get_text("dict")["blocks"]
+            # Collect all non-empty lines first with layout info
+            all_lines: List[Dict[str, Any]] = list(self._iter_lines(doc))
 
-                for block in blocks:
-                    if "lines" not in block:
-                        continue
+            # Split by headings and group non-heading lines into paragraphs per section
+            buffer_non_heading: List[Dict[str, Any]] = []
+            for ln in all_lines:
+                level = self._classify_level(ln["font_size"], heading_levels)
+                if level:
+                    # Flush any buffered content as a paragraph section if present
+                    if buffer_non_heading:
+                        paragraphs = self._group_paragraphs(buffer_non_heading)
+                        if current_section is None:
+                            current_section = {"level": "content", "title": None, "paragraphs": []}
+                            sections.append(current_section)
+                        current_section["paragraphs"].extend([" ".join(p_i["text"] for p_i in para) for para in paragraphs])
+                        buffer_non_heading = []
 
-                    for line in block["lines"]:
-                        line_text = ""
-                        line_font_size = 0
+                    # Start a new heading section
+                    current_section = {"level": level, "title": ln["text"], "paragraphs": []}
+                    sections.append(current_section)
+                else:
+                    buffer_non_heading.append(ln)
 
-                        for span in line["spans"]:
-                            if span["text"].strip():
-                                line_text += span["text"]
-                                line_font_size = max(line_font_size, span["size"])
-
-                        if line_text.strip():
-                            # Determine if this is a heading
-                            rounded_size = round(line_font_size, 1)
-                            level = heading_levels.get(rounded_size)
-
-                            if level:
-                                outline.append({
-                                    "level": level,
-                                    "text": line_text.strip()
-                                })
-                            else:
-                                # Regular text - could be added to content if needed
-                                if current_section is None:
-                                    current_section = {
-                                        "level": "content",
-                                        "text": line_text.strip()
-                                    }
-                                    outline.append(current_section)
-                                else:
-                                    if current_section.get("level") == "content":
-                                        current_section["text"] += " " + line_text.strip()
+            # Flush remaining buffer into the last/current section
+            if buffer_non_heading:
+                paragraphs = self._group_paragraphs(buffer_non_heading)
+                if current_section is None:
+                    current_section = {"level": "content", "title": None, "paragraphs": []}
+                    sections.append(current_section)
+                current_section["paragraphs"].extend([" ".join(p_i["text"] for p_i in para) for para in paragraphs])
 
             page_count = len(doc)
             doc.close()
@@ -140,11 +197,22 @@ class PDFStructureExtractor:
             processing_time = time.time() - start_time
             logger.info(f"Processing completed in {processing_time:.2f} seconds")
 
+            # Prepare enriched output
+            num_headings = sum(1 for s in sections if s.get("level", "").startswith("H"))
+            num_paragraphs = sum(len(s.get("paragraphs", [])) for s in sections)
+
             return {
                 "title": title,
-                "outline": outline,
-                "processing_time": processing_time,
-                "page_count": page_count
+                "sections": sections,
+                "font_histogram": {str(k): v for k, v in sorted(font_histogram.items())},
+                "heading_levels": {str(k): v for k, v in heading_levels.items()},
+                "stats": {
+                    "page_count": page_count,
+                    "processing_time": processing_time,
+                    "num_sections": len(sections),
+                    "num_headings": num_headings,
+                    "num_paragraphs": num_paragraphs
+                }
             }
 
         except Exception as e:
