@@ -134,6 +134,7 @@ class PDFStructureExtractor:
                                     if current_section.get("level") == "content":
                                         current_section["text"] += " " + line_text.strip()
 
+            page_count = len(doc)
             doc.close()
 
             processing_time = time.time() - start_time
@@ -143,7 +144,7 @@ class PDFStructureExtractor:
                 "title": title,
                 "outline": outline,
                 "processing_time": processing_time,
-                "page_count": len(doc)
+                "page_count": page_count
             }
 
         except Exception as e:
