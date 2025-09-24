@@ -40,8 +40,38 @@ The system extracts structured information from PDF documents while preserving d
 
 ### Prerequisites
 
-- Docker installed on an AMD64 machine
+- Docker installed on an AMD64 machine (optional if using Docker)
+- Python 3.10+ with pip
 - PDF documents to process
+
+### Run Without Docker
+
+You can run the extractor directly with Python.
+
+PowerShell (Windows):
+```powershell
+cd <your-repo-path>
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install --upgrade pip
+pip uninstall -y fitz  # ensure wrong package is not present
+pip install -r requirements.txt
+
+# Run against a PDF
+python .\pdf_extractor.py .\papers\1751-0473-7-7.pdf > output.json
+```
+
+Bash (Linux/macOS):
+```bash
+cd <your-repo-path>
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Run against a PDF
+python pdf_extractor.py ./papers/1751-0473-7-7.pdf > output.json
+```
 
 ### Building the Docker Image
 
