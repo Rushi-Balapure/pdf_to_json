@@ -42,20 +42,21 @@ class PDFStructureExtractor:
         total_chars = 0
 
         for page_num in range(min(len(doc), 10)):
-            page = doc[page_num]
-            blocks = page.get_text("dict")["blocks"]
-
+            blocks = doc[page_num].get_text("dict").get("blocks", [])
             for block in blocks:
-                if "lines" not in block:
+                lines = block.get("lines")
+                if not lines:
                     continue
-
-                for line in block["lines"]:
-                    for span in line["spans"]:
-                        if span["text"].strip():
-                            font_size = round(span["size"], 1)
-                            char_count = len(span["text"])
-                            font_histogram[font_size] += char_count
-                            total_chars += char_count
+                for line in lines:
+                    for span in line.get("spans", []):
+                        text = span.get("text", "")
+                        if not text or not text.strip():
+                            continue
+                        size = span.get("size", 0)
+                        font_size = round(float(size), 1)
+                        char_count = len(text)
+                        font_histogram[font_size] += char_count
+                        total_chars += char_count
 
         # Determine heading levels based on frequency and size
         heading_levels = {}
@@ -73,34 +74,38 @@ class PDFStructureExtractor:
     def _iter_lines(self, doc: fitz.Document):
         """Yield lines with their concatenated text, max font size, and y-position bounds."""
         for page_num in range(len(doc)):
-            page = doc[page_num]
-            blocks = page.get_text("dict")["blocks"]
+            blocks = doc[page_num].get_text("dict").get("blocks", [])
             for block in blocks:
-                if "lines" not in block:
+                lines = block.get("lines")
+                if not lines:
                     continue
-                for line in block["lines"]:
-                    line_text = ""
-                    line_font_size = 0.0
+                for line in lines:
+                    text_parts: List[str] = []
+                    max_size = 0.0
                     top_y = None
                     bottom_y = None
-                    for span in line["spans"]:
-                        if span["text"].strip():
-                            line_text += span["text"]
-                            line_font_size = max(line_font_size, float(span["size"]))
-                            bbox = span.get("bbox")
-                            if bbox:
-                                span_top = bbox[1]
-                                span_bottom = bbox[3]
-                                top_y = span_top if top_y is None else min(top_y, span_top)
-                                bottom_y = span_bottom if bottom_y is None else max(bottom_y, span_bottom)
-                    if line_text.strip():
-                        yield {
-                            "page": page_num,
-                            "text": line_text.strip(),
-                            "font_size": round(line_font_size, 1),
-                            "top": top_y,
-                            "bottom": bottom_y,
-                        }
+                    for span in line.get("spans", []):
+                        text = span.get("text", "")
+                        if not text or not text.strip():
+                            continue
+                        text_parts.append(text)
+                        size = float(span.get("size", 0.0))
+                        if size > max_size:
+                            max_size = size
+                        bbox = span.get("bbox")
+                        if bbox:
+                            span_top, span_bottom = bbox[1], bbox[3]
+                            top_y = span_top if top_y is None else min(top_y, span_top)
+                            bottom_y = span_bottom if bottom_y is None else max(bottom_y, span_bottom)
+                    if not text_parts:
+                        continue
+                    yield {
+                        "page": page_num,
+                        "text": "".join(text_parts).strip(),
+                        "font_size": round(max_size, 1),
+                        "top": top_y,
+                        "bottom": bottom_y,
+                    }
 
     def _classify_level(self, line_font_size: float, heading_levels: Dict[float, str]) -> Optional[str]:
         """Return heading level like 'H1'..'H6' if font size matches, else None."""
