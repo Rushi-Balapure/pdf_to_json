@@ -1,6 +1,30 @@
 # PDF Extraction System Usage Examples
 
 ## Basic Usage
+
+Windows PowerShell:
+```powershell
+cd <your-repo-path>
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install --upgrade pip
+pip uninstall -y fitz
+pip install -r requirements.txt
+python .\pdf_extractor.py .\papers\1751-0473-7-7.pdf > output.json
+```
+
+Bash (Linux/macOS):
+```bash
+cd <your-repo-path>
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip uninstall -y fitz
+pip install -r requirements.txt
+python pdf_extractor.py ./papers/1751-0473-7-7.pdf > output.json
+```
+
+## Basic Usage (Docker)
 ```bash
 # Build the container
 chmod +x build.sh
