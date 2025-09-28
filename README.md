@@ -1,111 +1,231 @@
-# Layout-Aware PDF Extraction System
+# PDF2JSON
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
+[![PyPI Version](https://img.shields.io/pypi/v/pdf2json.svg)](https://pypi.org/project/pdf2json/)
 
-## Overview
+A high-performance Python library for extracting structured content from PDF documents with layout-aware text extraction. PDF2JSON preserves document structure including headings (H1-H6) and body text, outputting clean JSON format.
 
-This project implements a **Layout-Aware PDF Extraction System** inspired by the paper:
+## Features
+
+- **Layout-aware extraction**: Detects document structure including headings of different levels using font size and style analysis
+- **Multilingual support**: Handles Latin, Cyrillic, Asian scripts (Chinese, Japanese, Korean), Arabic, Hebrew, and other complex Unicode scripts
+- **High performance**: Processes 50-page PDFs in ≤10 seconds on modern CPUs
+- **Small footprint**: Minimal dependencies, no heavy ML models used
+- **Offline operation**: No internet connectivity required to run
+- **Cross-platform**: AMD64 compatible, runs purely on CPU
+- **Easy to use**: Simple API with both programmatic and CLI interfaces
+
+## Installation
+
+```bash
+pip install pdf2json
+```
+
+## Quick Start
+
+### Python API
+
+```python
+import pdf2json
+
+# Extract PDF to dictionary
+result = pdf2json.extract_pdf_to_dict("document.pdf")
+print(f"Title: {result['title']}")
+print(f"Number of sections: {result['stats']['num_sections']}")
+
+# Extract PDF to JSON string
+json_output = pdf2json.extract_pdf_to_json("document.pdf")
+print(json_output)
+
+# Save to file
+pdf2json.extract_pdf_to_json("document.pdf", "output.json")
+```
+
+### Command Line Interface
+
+```bash
+# Extract to stdout
+pdf2json document.pdf
+
+# Save to file
+pdf2json document.pdf -o output.json
+
+# Compact output
+pdf2json document.pdf --compact
+
+# Pretty print (default)
+pdf2json document.pdf --pretty
+```
+
+## JSON Output Format
+
+```json
+{
+  "title": "Document Title",
+  "sections": [
+    {
+      "level": "H1",
+      "title": "Chapter 1: Introduction",
+      "paragraphs": ["This is the introduction text..."]
+    },
+    {
+      "level": "H2", 
+      "title": "1.1 Overview",
+      "paragraphs": ["Overview content..."]
+    },
+    {
+      "level": "content",
+      "title": null,
+      "paragraphs": ["Body text content..."]
+    }
+  ],
+  "font_histogram": {
+    "12.0": 1500,
+    "14.0": 200,
+    "16.0": 50
+  },
+  "heading_levels": {
+    "16.0": "H1",
+    "14.0": "H2"
+  },
+  "stats": {
+    "page_count": 25,
+    "processing_time": 2.34,
+    "num_sections": 15,
+    "num_headings": 8,
+    "num_paragraphs": 45
+  }
+}
+```
+
+## Advanced Usage
+
+### Custom Configuration
+
+```python
+from pdf2json import PDFStructureExtractor, Config
+
+# Create custom configuration
+config = Config()
+config.MAX_PAGES_FOR_FONT_ANALYSIS = 5
+config.MIN_HEADING_FREQUENCY = 0.002
+
+# Use with custom config
+extractor = PDFStructureExtractor(config)
+result = extractor.extract_text_with_structure("document.pdf")
+```
+
+### Error Handling
+
+```python
+from pdf2json import extract_pdf_to_dict
+from pdf2json.exceptions import PDF2JSONError, InvalidPDFError, FileNotFoundError
+
+try:
+    result = extract_pdf_to_dict("document.pdf")
+except FileNotFoundError:
+    print("PDF file not found")
+except InvalidPDFError:
+    print("Invalid or corrupted PDF file")
+except PDF2JSONError as e:
+    print(f"Processing error: {e}")
+```
+
+## Configuration Options
+
+You can configure PDF2JSON using environment variables:
+
+```bash
+# Font analysis settings
+export PDF2JSON_MAX_PAGES_FOR_FONT_ANALYSIS=10
+export PDF2JSON_FONT_SIZE_PRECISION=0.1
+export PDF2JSON_MIN_HEADING_FREQUENCY=0.001
+
+# Text processing settings
+export PDF2JSON_MIN_TEXT_LENGTH=3
+export PDF2JSON_MAX_HEADING_LEVELS=6
+export PDF2JSON_COMBINE_CONSECUTIVE_TEXT=True
+
+# Language support
+export PDF2JSON_MULTILINGUAL_SUPPORT=True
+export PDF2JSON_DEFAULT_ENCODING=utf-8
+
+# Performance settings
+export PDF2JSON_PROCESS_PAGES_IN_CHUNKS=False
+export PDF2JSON_CHUNK_SIZE=10
+
+# Debug settings
+export PDF2JSON_DEBUG_MODE=False
+export PDF2JSON_LOG_LEVEL=INFO
+```
+
+## Development
+
+### Installation from Source
+
+```bash
+git clone https://github.com/your-username/pdf2json.git
+cd pdf2json
+pip install -e .
+```
+
+### Running Tests
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
+
+### Building Documentation
+
+```bash
+pip install sphinx
+sphinx-build -b html docs docs/_build/html
+```
+
+## Performance
+
+PDF2JSON is optimized for high performance:
+
+- **CPU-only processing**: No GPU requirements
+- **Memory efficient**: Processes large documents without excessive memory usage
+- **Fast extraction**: Typical processing times:
+  - 10-page document: ~1-2 seconds
+  - 50-page document: ~5-10 seconds
+  - 100-page document: ~15-25 seconds
+
+## Supported Languages
+
+PDF2JSON supports text extraction from PDFs containing:
+
+- Latin scripts (English, Spanish, French, German, etc.)
+- Cyrillic scripts (Russian, Bulgarian, Serbian, etc.)
+- Asian scripts (Chinese, Japanese, Korean)
+- Arabic and Hebrew scripts
+- Other Unicode scripts
+
+## License
+
+This project is licensed under the **Apache License 2.0** - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## References
+
+This library is inspired by the research paper:
 
 **"Layout-Aware Text Extraction from Full-text PDF of Scientific Articles"**  
 _Cartic Ramakrishnan, Abhishek Patnia, Eduard Hovy, Gully APC Burns_  
 Published in Source Code for Biology and Medicine (2012)  
 [Full Paper](http://www.scfbm.org/content/7/1/7)
 
-The system extracts structured information from PDF documents while preserving document layout semantics such as headings (H1-H6) and body text, outputting the extracted content as JSON. It is optimized for high performance on CPU-only AMD64 architectures, supports multilingual text, and requires no internet access during runtime.
+## Support
 
-## Features
+For questions, issues, or contributions:
 
-- **Layout-aware extraction**: Detects document structure including headings of different levels using font size and style analysis.
-- **Multilingual support**: Handles Latin, Cyrillic, Asian scripts (Chinese, Japanese, Korean), Arabic, Hebrew, and other complex Unicode scripts.
-- **High performance**: Processes 50-page PDFs in ≤10 seconds on modern CPUs.
-- **Small footprint**: Docker image size under 200MB, no heavy ML models used.
-- **Offline operation**: No internet connectivity required to run.
-- **Cross-platform CPU support**: AMD64 compatible, runs purely on CPU.
-
-## JSON Output Example
-```json
-{
-"title": "Document Title Here",
-"outline": [
-{ "level": "H1", "text": "Chapter 1: Introduction" },
-{ "level": "H2", "text": "1.1 Overview" },
-{ "level": "content", "text": "Body text content..." }
-],
-"processing_time": 2.34,
-"page_count": 50
-}
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Docker installed on an AMD64 machine (optional if using Docker)
-- Python 3.10+ with pip
-- PDF documents to process
-
-### Run Without Docker
-
-You can run the extractor directly with Python.
-
-PowerShell (Windows):
-```powershell
-cd <your-repo-path>
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-pip uninstall -y fitz  # ensure wrong package is not present
-pip install -r requirements.txt
-
-# Run against a PDF
-python .\pdf_extractor.py .\papers\1751-0473-7-7.pdf > output.json
-```
-
-Bash (Linux/macOS):
-```bash
-cd <your-repo-path>
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-
-# Run against a PDF
-python pdf_extractor.py ./papers/1751-0473-7-7.pdf > output.json
-```
-
-### Building the Docker Image
-
-You can build the extraction system Docker image with the provided build script:
-```bash
-chmod +x build.sh
-./build.sh
-```
-
-This builds the Docker container optimized for CPU-only usage and minimal size.
-
-### Running the Extraction
-
-To extract text from a PDF, mount your PDF directory and run:
-```bash
-docker run --rm -v /path/to/pdfs:/pdfs pdf-extractor:latest /pdfs/document.pdf
-```
-The output JSON is printed to stdout. To save the output to a file:
-```bash
-docker run --rm -v /path/to/pdfs:/pdfs pdf-extractor:latest /pdfs/document.pdf > output.json
-```
-
-## System Architecture
-
-The system is built using [PyMuPDF (fitz)](https://pymupdf.readthedocs.io/en/latest/) for robust text and font extraction without requiring internet or GPUs. The heading detection algorithm analyses font size histograms on initial pages to classify headings from H1 to H6.
-
-## License
-
-This project is licensed under the **Apache License 2.0** - see the [LICENSE](LICENSE) file for details.
-
-## References
-
-Ramakrishnan, C., Patnia, A., Hovy, E., Burns, G. A. P. C. (2012). Layout-aware text extraction from full-text PDF of scientific articles. _Source Code for Biology and Medicine, 7_(7). https://doi.org/10.1186/1751-0473-7-7
-
-## Contact
-
-For questions or contributions, feel free to open an issue or contact the me(rishibalapure12@gmail.com)
+- 📧 Email: rishibalapure12@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/your-username/pdf2json/issues)
+- 📖 Documentation: [GitHub Wiki](https://github.com/your-username/pdf2json/wiki)
