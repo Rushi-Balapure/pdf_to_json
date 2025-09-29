@@ -2,6 +2,7 @@
 Basic usage examples for PDF2JSON library.
 """
 
+import sys
 import pdf2json
 from pdf2json.exceptions import PDF2JSONError
 
@@ -83,13 +84,13 @@ def example_error_handling():
     try:
         result = pdf2json.extract_pdf_to_dict("nonexistent.pdf")
     except FileNotFoundError:
-        print("✓ Correctly caught: File not found")
+        print("[OK] Correctly caught: File not found")
     except InvalidPDFError:
-        print("✓ Correctly caught: Invalid PDF")
+        print("[OK] Correctly caught: Invalid PDF")
     except PDF2JSONError as e:
-        print(f"✓ Correctly caught: PDF2JSON error - {e}")
+        print(f"[OK] Correctly caught: PDF2JSON error - {e}")
     except Exception as e:
-        print(f"✗ Unexpected error: {e}")
+        print(f"[FAIL] Unexpected error: {e}")
 
 if __name__ == "__main__":
     print("PDF2JSON Examples")

@@ -14,7 +14,7 @@ Features:
 """
 
 __version__ = "1.0.0"
-__author__ = "PDF2JSON Team"
+__author__ = "Rushi Balapure"
 __email__ = "rishibalapure12@gmail.com"
 
 from .extractor import PDFStructureExtractor

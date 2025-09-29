@@ -3,6 +3,7 @@ Advanced usage examples for PDF2JSON library.
 """
 
 import json
+import sys
 import pdf2json
 from pdf2json import PDFStructureExtractor, Config
 from pdf2json.exceptions import PDF2JSONError
@@ -23,9 +24,9 @@ def example_batch_processing():
                 "sections": len(result["sections"]),
                 "pages": result["stats"]["page_count"]
             })
-            print(f"✓ Processed {pdf_file}: {result['title']}")
+            print(f"[OK] Processed {pdf_file}: {result['title']}")
         except PDF2JSONError as e:
-            print(f"✗ Failed to process {pdf_file}: {e}")
+            print(f"[FAIL] Failed to process {pdf_file}: {e}")
     
     # Save batch results
     with open("batch_results.json", "w") as f:
@@ -158,7 +159,7 @@ def example_export_formats():
         
         with open("output.md", "w", encoding="utf-8") as f:
             f.write("\n".join(markdown_content))
-        print("✓ Exported to Markdown: output.md")
+        print("[OK] Exported to Markdown: output.md")
         
         # Export to plain text
         text_content = []
@@ -176,7 +177,7 @@ def example_export_formats():
         
         with open("output.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(text_content))
-        print("✓ Exported to plain text: output.txt")
+        print("[OK] Exported to plain text: output.txt")
         
     except PDF2JSONError as e:
         print(f"Error: {e}")
