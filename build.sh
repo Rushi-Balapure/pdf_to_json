@@ -1,19 +1,33 @@
 #!/bin/bash
-# Build script for optimized PDF extraction container
+# Build script for PDF2JSON library
 
-echo "Building optmized PDF extraction container..."
+echo "Building PDF2JSON library..."
 
-# Build with build-time optimizations
-docker build \
-    --no-cache \
-    --tag pdf-extractor:latest \
-    --tag pdf-extractor:v1.0 \
-    .
+# Clean previous builds
+echo "Cleaning previous builds..."
+rm -rf build/ dist/ *.egg-info/
 
-echo "Build completed!"
-echo "Image size:"
-docker images pdf-extractor:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+# Build the library package
+echo "Building Python package..."
+python3 -m build
 
-echo ""
-echo "To run the container:"
-echo "docker run --rm -v /path/to/pdfs:/pdfs pdf-extractor:latest /pdfs/sample.pdf"
+# Check if build was successful
+if [ $? -eq 0 ]; then
+    echo "Build completed successfully!"
+    echo ""
+    echo "Generated packages:"
+    ls -la dist/
+    echo ""
+    echo "To install the library:"
+    echo "pip install dist/pdf2json-1.0.0-py3-none-any.whl"
+    echo ""
+    echo "To upload to PyPI:"
+    echo "twine upload dist/*"
+    echo ""
+    echo "To test the library:"
+    echo "pip install dist/pdf2json-1.0.0-py3-none-any.whl"
+    echo "python -c \"import pdf2json; print('Library installed successfully!')\""
+else
+    echo "Build failed!"
+    exit 1
+fi

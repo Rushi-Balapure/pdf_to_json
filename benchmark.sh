@@ -1,8 +1,8 @@
 #!/bin/bash
-# Performance benchmark script for PDF extraction system
+# Performance benchmark script for PDF2JSON library
 
-echo "PDF Extraction System Performance Benchmark"
-echo "==========================================="
+echo "PDF2JSON Library Performance Benchmark"
+echo "======================================"
 
 # Create test directory
 mkdir -p benchmark_results
@@ -20,7 +20,19 @@ run_benchmark() {
         echo -n "Iteration $i: "
         start_time=$(date +%s.%N)
 
-        docker run --rm -v $(pwd)/test:/test pdf-extractor:latest "/test/$pdf_file" > /dev/null 2>&1
+        # Use the new library API
+        python3 -c "
+import pdf2json
+import sys
+try:
+    result = pdf2json.extract_pdf_to_dict('$pdf_file')
+    print(f'Title: {result[\"title\"]}')
+    print(f'Pages: {result[\"stats\"][\"page_count\"]}')
+    print(f'Sections: {result[\"stats\"][\"num_sections\"]}')
+except Exception as e:
+    print(f'Error: {e}')
+    sys.exit(1)
+" > /dev/null 2>&1
 
         end_time=$(date +%s.%N)
         iteration_time=$(echo "$end_time - $start_time" | bc -l)
@@ -38,6 +50,13 @@ run_benchmark() {
 # Check if test PDFs exist
 if [ ! -d "test" ]; then
     echo "Please create a 'test' directory with PDF files for benchmarking"
+    exit 1
+fi
+
+# Check if pdf2json is installed
+if ! python3 -c "import pdf2json" 2>/dev/null; then
+    echo "Error: pdf2json library not installed"
+    echo "Install with: pip install pdf2json"
     exit 1
 fi
 

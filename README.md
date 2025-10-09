@@ -165,9 +165,24 @@ export PDF2JSON_LOG_LEVEL=INFO
 ### Installation from Source
 
 ```bash
+pip install pdf2json
+```
+or
+
+```bash
 git clone https://github.com/your-username/pdf2json.git
 cd pdf2json
 pip install -e .
+```
+
+### Building the Library
+
+```bash
+# Build the package
+./build.sh
+
+# Or manually
+python -m build
 ```
 
 ### Running Tests
@@ -177,11 +192,14 @@ pip install -e ".[dev]"
 pytest
 ```
 
-### Building Documentation
+### Docker Development
 
 ```bash
-pip install sphinx
-sphinx-build -b html docs docs/_build/html
+# Build Docker image
+docker build -t pdf2json:latest .
+
+# Run with Docker
+docker run --rm -v $(pwd)/test:/test pdf2json:latest /test/document.pdf
 ```
 
 ## Performance
