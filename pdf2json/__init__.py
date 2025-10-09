@@ -49,10 +49,10 @@ def extract_pdf_to_json(pdf_path: str, output_path: str = None) -> str:
     result = extractor.extract_text_with_structure(pdf_path)
     
     import json
-    json_str = json.dumps(result, ensure_ascii=False, indent=2)
+    json_str = json.dumps(result, ensure_ascii = False, indent = 2)
     
     if output_path:
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, 'w', encoding = 'utf-8') as f:
             f.write(json_str)
         return output_path
     

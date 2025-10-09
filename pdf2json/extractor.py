@@ -16,7 +16,7 @@ from .config import Config
 from .exceptions import PDF2JSONError, PDFProcessingError, InvalidPDFError, FileNotFoundError
 
 # Configure logging
-logging.basicConfig(level=getattr(logging, Config.LOG_LEVEL))
+logging.basicConfig(level = getattr(logging, Config.LOG_LEVEL))
 logger = logging.getLogger(__name__)
 
 @dataclass
