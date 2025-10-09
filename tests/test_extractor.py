@@ -58,7 +58,6 @@ class TestPDFStructureExtractor:
         # Mock document
         mock_doc = Mock()
         mock_doc.__len__ = Mock(return_value=2)
-        mock_doc.__getitem__ = Mock()
         
         # Mock page
         mock_page = Mock()
@@ -75,8 +74,12 @@ class TestPDFStructureExtractor:
                 }
             ]
         }
-        mock_doc[0] = mock_page
-        mock_doc[1] = mock_page
+        
+        # Set up the document to return the mock page
+        def get_page(self, index):
+            return mock_page
+        
+        mock_doc.__getitem__ = get_page
         
         mock_fitz_open.return_value = mock_doc
         

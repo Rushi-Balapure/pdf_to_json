@@ -22,14 +22,10 @@ class TestCLI:
         # This would normally be called with --help, but we're testing the argument parsing
         # The actual help test would require modifying sys.argv
     
-    @patch('pdf2json.cli.extract_pdf_to_dict')
+    @patch('pdf2json.cli.extract_pdf_to_json')
     def test_cli_success_stdout(self, mock_extract):
         """Test successful CLI execution with stdout output."""
-        mock_result = {
-            "title": "Test Document",
-            "sections": [{"level": "H1", "title": "Introduction", "paragraphs": ["Content"]}],
-            "stats": {"page_count": 1, "processing_time": 1.0}
-        }
+        mock_result = '{"title": "Test Document", "sections": []}'
         mock_extract.return_value = mock_result
         
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp:
@@ -108,10 +104,12 @@ class TestCLI:
             os.unlink(tmp_path)
     
     @patch('pdf2json.cli.extract_pdf_to_dict')
-    def test_cli_compact_output(self, mock_extract):
+    @patch('pdf2json.cli.extract_pdf_to_json')
+    def test_cli_compact_output(self, mock_extract_json, mock_extract_dict):
         """Test CLI compact output option."""
         mock_result = {"title": "Test", "sections": []}
-        mock_extract.return_value = mock_result
+        mock_extract_dict.return_value = mock_result
+        mock_extract_json.return_value = '{"title": "Test", "sections": []}'
         
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp:
             tmp.write(b"pdf content")
@@ -126,10 +124,10 @@ class TestCLI:
         finally:
             os.unlink(tmp_path)
     
-    @patch('pdf2json.cli.extract_pdf_to_dict')
+    @patch('pdf2json.cli.extract_pdf_to_json')
     def test_cli_pretty_output(self, mock_extract):
         """Test CLI pretty output option."""
-        mock_result = {"title": "Test", "sections": []}
+        mock_result = '{"title": "Test", "sections": []}'
         mock_extract.return_value = mock_result
         
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp:
