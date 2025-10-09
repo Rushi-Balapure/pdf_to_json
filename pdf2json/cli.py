@@ -28,37 +28,37 @@ Examples:
     
     parser.add_argument(
         "pdf_path",
-        help="Path to the PDF file to process"
+        help = "Path to the PDF file to process"
     )
     
     parser.add_argument(
         "-o", "--output",
-        help="Output file path (default: stdout)"
+        help = "Output file path (default: stdout)"
     )
     
     parser.add_argument(
         "--pretty",
-        action="store_true",
-        help="Pretty print JSON output (default: True)"
+        action = "store_true",
+        help = "Pretty print JSON output (default: True)"
     )
     
     parser.add_argument(
         "--compact",
-        action="store_true", 
-        help="Compact JSON output (no indentation)"
+        action = "store_true", 
+        help = "Compact JSON output (no indentation)"
     )
     
     parser.add_argument(
         "--version",
-        action="version",
-        version="PDF2JSON 1.0.0"
+        action = "version",
+        version = "PDF2JSON 1.0.0"
     )
     
     args = parser.parse_args()
     
     # Validate input file
     if not os.path.exists(args.pdf_path):
-        print(f"Error: PDF file '{args.pdf_path}' not found", file=sys.stderr)
+        print(f"Error: PDF file '{args.pdf_path}' not found", file = sys.stderr)
         sys.exit(1)
     
     try:
@@ -69,11 +69,11 @@ Examples:
             
             # Format JSON
             if args.compact:
-                json_str = json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+                json_str = json.dumps(result, ensure_ascii = False, separators = (',', ':'))
             else:
-                json_str = json.dumps(result, ensure_ascii=False, indent=2)
+                json_str = json.dumps(result, ensure_ascii = False, indent = 2)
             
-            with open(args.output, 'w', encoding='utf-8') as f:
+            with open(args.output, 'w', encoding = 'utf-8') as f:
                 f.write(json_str)
             
             print(f"Successfully extracted PDF content to '{args.output}'")
@@ -83,17 +83,17 @@ Examples:
                 json_str = extract_pdf_to_json(args.pdf_path)
                 # Remove indentation for compact output
                 result = extract_pdf_to_dict(args.pdf_path)
-                json_str = json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+                json_str = json.dumps(result, ensure_ascii = False, separators = (',', ':'))
             else:
                 json_str = extract_pdf_to_json(args.pdf_path)
             
             print(json_str)
             
     except PDF2JSONError as e:
-        print(f"Error: {e}", file=sys.stderr)
+        print(f"Error: {e}", file = sys.stderr)
         sys.exit(1)
     except Exception as e:
-        print(f"Unexpected error: {e}", file=sys.stderr)
+        print(f"Unexpected error: {e}", file = sys.stderr)
         sys.exit(1)
 
 

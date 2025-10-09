@@ -5,7 +5,7 @@ Pytest configuration and fixtures for PDF2JSON tests.
 import pytest
 import tempfile
 import os
-
+from unittest.mock import Mock
 
 @pytest.fixture
 def sample_pdf():
