@@ -7,7 +7,7 @@ import io
 import os
 import time
 from typing import Dict, List, Any, Optional
-import fitz  # PyMuPDF
+import pymupdf as fitz  # PyMuPDF
 from dataclasses import dataclass
 from collections import defaultdict
 import logging
