@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# PDF2JSON specific
+# pdf-to-json specific
 output.json
 output.md
 output.txt

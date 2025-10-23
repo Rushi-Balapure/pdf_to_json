@@ -1,5 +1,5 @@
 """
-PDF2JSON - A high-performance PDF to JSON extraction library.
+pdf-to-json - A high-performance PDF to JSON extraction library.
 
 This library extracts structured content from PDF documents while preserving
 document layout semantics such as headings (H1-H6) and body text, outputting
@@ -19,12 +19,12 @@ __email__ = "rishibalapure12@gmail.com"
 
 from .extractor import PDFStructureExtractor
 from .config import Config
-from .exceptions import PDF2JSONError, PDFProcessingError, InvalidPDFError
+from .exceptions import PdfToJsonError, PDFProcessingError, InvalidPDFError
 
 __all__ = [
     "PDFStructureExtractor",
     "Config", 
-    "PDF2JSONError",
+    "PdfToJsonError",
     "PDFProcessingError", 
     "InvalidPDFError",
     "extract_pdf_to_json",
@@ -43,7 +43,7 @@ def extract_pdf_to_json(pdf_path: str, output_path: str = None) -> str:
         str: JSON string if output_path is None, otherwise saves to file and returns path
         
     Raises:
-        PDF2JSONError: If PDF processing fails
+        PdfToJsonError: If PDF processing fails
     """
     extractor = PDFStructureExtractor()
     result = extractor.extract_text_with_structure(pdf_path)
@@ -69,7 +69,7 @@ def extract_pdf_to_dict(pdf_path: str) -> dict:
         dict: Dictionary containing extracted PDF structure
         
     Raises:
-        PDF2JSONError: If PDF processing fails
+        PdfToJsonError: If PDF processing fails
     """
     extractor = PDFStructureExtractor()
     return extractor.extract_text_with_structure(pdf_path)

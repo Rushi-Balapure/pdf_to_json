@@ -1,5 +1,5 @@
 """
-Unit tests for PDF2JSON CLI.
+Unit tests for pdf-to-json CLI.
 """
 
 import pytest
@@ -7,12 +7,12 @@ import tempfile
 import os
 import json
 from unittest.mock import Mock, patch
-from pdf2json.cli import main
-from pdf2json.exceptions import PDF2JSONError
+from pdf_to_json.cli import main
+from pdf_to_json.exceptions import PdfToJsonError
 
 
 class TestCLI:
-    """Test cases for PDF2JSON CLI."""
+    """Test cases for pdf-to-json CLI."""
     
     def test_cli_help(self, capsys):
         """Test CLI help output."""
@@ -22,7 +22,7 @@ class TestCLI:
         # This would normally be called with --help, but we're testing the argument parsing
         # The actual help test would require modifying sys.argv
     
-    @patch('pdf2json.cli.extract_pdf_to_json')
+    @patch('pdf_to_json.cli.extract_pdf_to_json')
     def test_cli_success_stdout(self, mock_extract):
         """Test successful CLI execution with stdout output."""
         mock_result = '{"title": "Test Document", "sections": []}'
@@ -34,7 +34,7 @@ class TestCLI:
         
         try:
             # Mock sys.argv to simulate command line arguments
-            with patch('sys.argv', ['pdf2json', tmp_path]):
+            with patch('sys.argv', ['pdf-to-json', tmp_path]):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout
@@ -42,7 +42,7 @@ class TestCLI:
         finally:
             os.unlink(tmp_path)
     
-    @patch('pdf2json.cli.extract_pdf_to_dict')
+    @patch('pdf_to_json.cli.extract_pdf_to_dict')
     def test_cli_success_file_output(self, mock_extract):
         """Test successful CLI execution with file output."""
         mock_result = {
@@ -61,7 +61,7 @@ class TestCLI:
         
         try:
             # Mock sys.argv to simulate command line arguments
-            with patch('sys.argv', ['pdf2json', pdf_path, '-o', json_path]):
+            with patch('sys.argv', ['pdf-to-json', pdf_path, '-o', json_path]):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that success message was printed
@@ -77,24 +77,24 @@ class TestCLI:
     
     def test_cli_file_not_found(self):
         """Test CLI error handling for non-existent file."""
-        with patch('sys.argv', ['pdf2json', 'nonexistent.pdf']):
+        with patch('sys.argv', ['pdf-to-json', 'nonexistent.pdf']):
             with patch('sys.stderr') as mock_stderr:
                 with pytest.raises(SystemExit):
                     main()
                 # Verify error message was written to stderr
                 mock_stderr.write.assert_called()
     
-    @patch('pdf2json.cli.extract_pdf_to_dict')
+    @patch('pdf_to_json.cli.extract_pdf_to_dict')
     def test_cli_processing_error(self, mock_extract):
         """Test CLI error handling for processing errors."""
-        mock_extract.side_effect = PDF2JSONError("Processing failed")
+        mock_extract.side_effect = PdfToJsonError("Processing failed")
         
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp:
             tmp.write(b"pdf content")
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf2json', tmp_path]):
+            with patch('sys.argv', ['pdf-to-json', tmp_path]):
                 with patch('sys.stderr') as mock_stderr:
                     with pytest.raises(SystemExit):
                         main()
@@ -103,8 +103,8 @@ class TestCLI:
         finally:
             os.unlink(tmp_path)
     
-    @patch('pdf2json.cli.extract_pdf_to_dict')
-    @patch('pdf2json.cli.extract_pdf_to_json')
+    @patch('pdf_to_json.cli.extract_pdf_to_dict')
+    @patch('pdf_to_json.cli.extract_pdf_to_json')
     def test_cli_compact_output(self, mock_extract_json, mock_extract_dict):
         """Test CLI compact output option."""
         mock_result = {"title": "Test", "sections": []}
@@ -116,7 +116,7 @@ class TestCLI:
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf2json', tmp_path, '--compact']):
+            with patch('sys.argv', ['pdf-to-json', tmp_path, '--compact']):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout
@@ -124,7 +124,7 @@ class TestCLI:
         finally:
             os.unlink(tmp_path)
     
-    @patch('pdf2json.cli.extract_pdf_to_json')
+    @patch('pdf_to_json.cli.extract_pdf_to_json')
     def test_cli_pretty_output(self, mock_extract):
         """Test CLI pretty output option."""
         mock_result = '{"title": "Test", "sections": []}'
@@ -135,7 +135,7 @@ class TestCLI:
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf2json', tmp_path, '--pretty']):
+            with patch('sys.argv', ['pdf-to-json', tmp_path, '--pretty']):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout

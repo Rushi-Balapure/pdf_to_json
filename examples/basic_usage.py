@@ -1,10 +1,10 @@
 """
-Basic usage examples for PDF2JSON library.
+Basic usage examples for pdf-to-json library.
 """
 
 import sys
-import pdf2json
-from pdf2json.exceptions import PDF2JSONError
+import pdf_to_json
+from pdf_to_json.exceptions import PdfToJsonError
 
 def example_basic_extraction():
     """Example of basic PDF extraction."""
@@ -12,7 +12,7 @@ def example_basic_extraction():
     
     try:
         # Extract PDF to dictionary
-        result = pdf2json.extract_pdf_to_dict("sample.pdf")
+        result = pdf_to_json.extract_pdf_to_dict("sample.pdf")
         
         print(f"Document Title: {result['title']}")
         print(f"Number of Pages: {result['stats']['page_count']}")
@@ -31,7 +31,7 @@ def example_basic_extraction():
             if paragraphs:
                 print(f"     First paragraph: {paragraphs[0][:100]}...")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_json_output():
@@ -40,22 +40,22 @@ def example_json_output():
     
     try:
         # Extract to JSON string
-        json_output = pdf2json.extract_pdf_to_json("sample.pdf")
+        json_output = pdf_to_json.extract_pdf_to_json("sample.pdf")
         print("JSON output (first 500 characters):")
         print(json_output[:500] + "...")
         
         # Save to file
-        output_file = pdf2json.extract_pdf_to_json("sample.pdf", "output.json")
+        output_file = pdf_to_json.extract_pdf_to_json("sample.pdf", "output.json")
         print(f"\nSaved to file: {output_file}")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_custom_config():
     """Example with custom configuration."""
     print("\n=== Custom Configuration ===")
     
-    from pdf2json import PDFStructureExtractor, Config
+    from pdf_to_json import PDFStructureExtractor, Config
     
     # Create custom configuration
     config = Config()
@@ -72,28 +72,28 @@ def example_custom_config():
         print(f"  Font histogram: {result['font_histogram']}")
         print(f"  Heading levels: {result['heading_levels']}")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_error_handling():
     """Example of proper error handling."""
     print("\n=== Error Handling ===")
     
-    from pdf2json.exceptions import InvalidPDFError, FileNotFoundError
+    from pdf_to_json.exceptions import InvalidPDFError, FileNotFoundError
     
     try:
-        result = pdf2json.extract_pdf_to_dict("nonexistent.pdf")
+        result = pdf_to_json.extract_pdf_to_dict("nonexistent.pdf")
     except FileNotFoundError:
         print("[OK] Correctly caught: File not found")
     except InvalidPDFError:
         print("[OK] Correctly caught: Invalid PDF")
-    except PDF2JSONError as e:
-        print(f"[OK] Correctly caught: PDF2JSON error - {e}")
+    except PdfToJsonError as e:
+        print(f"[OK] Correctly caught: pdf-to-json error - {e}")
     except Exception as e:
         print(f"[FAIL] Unexpected error: {e}")
 
 if __name__ == "__main__":
-    print("PDF2JSON Examples")
+    print("pdf-to-json Examples")
     print("=================")
     
     # Run examples

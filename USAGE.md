@@ -1,14 +1,14 @@
-# PDF2JSON Library Usage Examples
+# pdf-to-json Library Usage Examples
 
 ## Installation
 
 ```bash
 # Install from PyPI
-pip install pdf2json
+pip install pdf-to-json
 
 # Or install from source
-git clone https://github.com/your-username/pdf2json.git
-cd pdf2json
+git clone https://github.com/your-username/pdf-to-json.git
+cd pdf-to-json
 pip install -e .
 ```
 
@@ -17,49 +17,49 @@ pip install -e .
 ### Python API
 
 ```python
-import pdf2json
+import pdf_to_json
 
 # Extract PDF to dictionary
-result = pdf2json.extract_pdf_to_dict("document.pdf")
+result = pdf_to_json.extract_pdf_to_dict("document.pdf")
 print(f"Title: {result['title']}")
 print(f"Pages: {result['stats']['page_count']}")
 print(f"Sections: {result['stats']['num_sections']}")
 
 # Extract PDF to JSON string
-json_output = pdf2json.extract_pdf_to_json("document.pdf")
+json_output = pdf_to_json.extract_pdf_to_json("document.pdf")
 print(json_output)
 
 # Save to file
-pdf2json.extract_pdf_to_json("document.pdf", "output.json")
+pdf_to_json.extract_pdf_to_json("document.pdf", "output.json")
 ```
 
 ### Command Line Interface
 
 ```bash
 # Extract to stdout
-pdf2json document.pdf
+pdf-to-json document.pdf
 
 # Save to file
-pdf2json document.pdf -o output.json
+pdf-to-json document.pdf -o output.json
 
 # Compact output
-pdf2json document.pdf --compact
+pdf-to-json document.pdf --compact
 
 # Pretty print (default)
-pdf2json document.pdf --pretty
+pdf-to-json document.pdf --pretty
 ```
 
 ## Docker Usage
 
 ```bash
 # Build the container
-docker build -t pdf2json:latest .
+docker build -t pdf-to-json:latest .
 
 # Extract from a single PDF
-docker run --rm -v $(pwd)/pdfs:/pdfs pdf2json:latest /pdfs/document.pdf
+docker run --rm -v $(pwd)/pdfs:/pdfs pdf-to-json:latest /pdfs/document.pdf
 
 # Process multiple PDFs with output redirection
-docker run --rm -v $(pwd)/pdfs:/pdfs pdf2json:latest /pdfs/document.pdf > output.json
+docker run --rm -v $(pwd)/pdfs:/pdfs pdf-to-json:latest /pdfs/document.pdf > output.json
 ```
 
 ## Batch Processing
@@ -68,7 +68,7 @@ docker run --rm -v $(pwd)/pdfs:/pdfs pdf2json:latest /pdfs/document.pdf > output
 # Process all PDFs in a directory
 for pdf in pdfs/*.pdf; do
     echo "Processing: $pdf"
-    pdf2json "$pdf" -o "output/$(basename "$pdf" .pdf).json"
+    pdf-to-json "$pdf" -o "output/$(basename "$pdf" .pdf).json"
 done
 ```
 
@@ -77,7 +77,7 @@ done
 ### Custom Configuration
 
 ```python
-from pdf2json import PDFStructureExtractor, Config
+from pdf_to_json import PDFStructureExtractor, Config
 
 # Create custom configuration
 config = Config()
@@ -92,8 +92,8 @@ result = extractor.extract_text_with_structure("document.pdf")
 ### Error Handling
 
 ```python
-from pdf2json import extract_pdf_to_dict
-from pdf2json.exceptions import PDF2JSONError, InvalidPDFError, FileNotFoundError
+from pdf_to_json import extract_pdf_to_dict
+from pdf_to_json.exceptions import PdfToJsonError, InvalidPDFError, FileNotFoundError
 
 try:
     result = extract_pdf_to_dict("document.pdf")
@@ -101,7 +101,7 @@ except FileNotFoundError:
     print("PDF file not found")
 except InvalidPDFError:
     print("Invalid or corrupted PDF file")
-except PDF2JSONError as e:
+except PdfToJsonError as e:
     print(f"Processing error: {e}")
 ```
 
@@ -113,7 +113,7 @@ chmod +x benchmark.sh
 ./benchmark.sh
 
 # Test with a specific PDF
-time pdf2json document.pdf
+time pdf-to-json document.pdf
 ```
 
 ## Expected Output Format

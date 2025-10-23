@@ -1,5 +1,5 @@
 """
-Pytest configuration and fixtures for PDF2JSON tests.
+Pytest configuration and fixtures for pdf-to-json tests.
 """
 
 import pytest

@@ -1,7 +1,7 @@
 #!/bin/bash
-# Performance benchmark script for PDF2JSON library
+# Performance benchmark script for pdf-to-json library
 
-echo "PDF2JSON Library Performance Benchmark"
+echo "pdf-to-json Library Performance Benchmark"
 echo "======================================"
 
 # Create test directory
@@ -22,10 +22,10 @@ run_benchmark() {
 
         # Use the new library API
         python3 -c "
-import pdf2json
+import pdf_to_json
 import sys
 try:
-    result = pdf2json.extract_pdf_to_dict('$pdf_file')
+    result = pdf_to_json.extract_pdf_to_dict('$pdf_file')
     print(f'Title: {result[\"title\"]}')
     print(f'Pages: {result[\"stats\"][\"page_count\"]}')
     print(f'Sections: {result[\"stats\"][\"num_sections\"]}')
@@ -53,10 +53,10 @@ if [ ! -d "test" ]; then
     exit 1
 fi
 
-# Check if pdf2json is installed
-if ! python3 -c "import pdf2json" 2>/dev/null; then
-    echo "Error: pdf2json library not installed"
-    echo "Install with: pip install pdf2json"
+# Check if pdf-to-json is installed
+if ! python3 -c "import pdf_to_json" 2>/dev/null; then
+    echo "Error: pdf-to-json library not installed"
+    echo "Install with: pip install pdf-to-json"
     exit 1
 fi
 
