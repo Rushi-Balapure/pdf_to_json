@@ -1,12 +1,12 @@
 """
-Advanced usage examples for PDF2JSON library.
+Advanced usage examples for pdf-to-json library.
 """
 
 import json
 import sys
-import pdf2json
-from pdf2json import PDFStructureExtractor, Config
-from pdf2json.exceptions import PDF2JSONError
+import pdf_to_json
+from pdf_to_json import PDFStructureExtractor, Config
+from pdf_to_json.exceptions import PdfToJsonError
 
 def example_batch_processing():
     """Example of processing multiple PDFs."""
@@ -17,7 +17,7 @@ def example_batch_processing():
     
     for pdf_file in pdf_files:
         try:
-            result = pdf2json.extract_pdf_to_dict(pdf_file)
+            result = pdf_to_json.extract_pdf_to_dict(pdf_file)
             results.append({
                 "file": pdf_file,
                 "title": result["title"],
@@ -25,7 +25,7 @@ def example_batch_processing():
                 "pages": result["stats"]["page_count"]
             })
             print(f"[OK] Processed {pdf_file}: {result['title']}")
-        except PDF2JSONError as e:
+        except PdfToJsonError as e:
             print(f"[FAIL] Failed to process {pdf_file}: {e}")
     
     # Save batch results
@@ -38,7 +38,7 @@ def example_heading_analysis():
     print("\n=== Heading Analysis ===")
     
     try:
-        result = pdf2json.extract_pdf_to_dict("sample.pdf")
+        result = pdf_to_json.extract_pdf_to_dict("sample.pdf")
         
         # Analyze heading structure
         heading_counts = {}
@@ -59,7 +59,7 @@ def example_heading_analysis():
         
         print(f"\nFound {len(introduction_sections)} sections with 'introduction' in title")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_content_filtering():
@@ -67,7 +67,7 @@ def example_content_filtering():
     print("\n=== Content Filtering ===")
     
     try:
-        result = pdf2json.extract_pdf_to_dict("sample.pdf")
+        result = pdf_to_json.extract_pdf_to_dict("sample.pdf")
         
         # Extract only headings
         headings = [
@@ -89,7 +89,7 @@ def example_content_filtering():
         print(f"\nTotal paragraphs: {len(all_paragraphs)}")
         print(f"Average paragraph length: {sum(len(p) for p in all_paragraphs) / len(all_paragraphs):.1f} characters")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_custom_extraction():
@@ -126,7 +126,7 @@ def example_custom_extraction():
         for section_type, sections in sections_by_type.items():
             print(f"  {section_type.title()}: {len(sections)} sections")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 def example_export_formats():
@@ -134,7 +134,7 @@ def example_export_formats():
     print("\n=== Export Formats ===")
     
     try:
-        result = pdf2json.extract_pdf_to_dict("sample.pdf")
+        result = pdf_to_json.extract_pdf_to_dict("sample.pdf")
         
         # Export to Markdown
         markdown_content = []
@@ -179,11 +179,11 @@ def example_export_formats():
             f.write("\n".join(text_content))
         print("[OK] Exported to plain text: output.txt")
         
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    print("PDF2JSON Advanced Examples")
+    print("pdf-to-json Advanced Examples")
     print("==========================")
     
     # Run advanced examples

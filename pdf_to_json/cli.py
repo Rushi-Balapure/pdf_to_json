@@ -1,5 +1,5 @@
 """
-Command-line interface for PDF2JSON library.
+Command-line interface for pdf-to-json library.
 """
 
 import argparse
@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 from . import extract_pdf_to_json, extract_pdf_to_dict
-from .exceptions import PDF2JSONError
+from .exceptions import PdfToJsonError
 
 
 def main():
@@ -19,10 +19,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  pdf2json document.pdf                    # Extract to stdout
-  pdf2json document.pdf -o output.json    # Save to file
-  pdf2json document.pdf --pretty          # Pretty print JSON
-  pdf2json document.pdf --compact         # Compact JSON output
+  pdf-to-json document.pdf                    # Extract to stdout
+  pdf-to-json document.pdf -o output.json    # Save to file
+  pdf-to-json document.pdf --pretty          # Pretty print JSON
+  pdf-to-json document.pdf --compact         # Compact JSON output
         """
     )
     
@@ -51,7 +51,7 @@ Examples:
     parser.add_argument(
         "--version",
         action = "version",
-        version = "PDF2JSON 1.0.0"
+        version = "pdf-to-json 1.0.0"
     )
     
     args = parser.parse_args()
@@ -89,7 +89,7 @@ Examples:
             
             print(json_str)
             
-    except PDF2JSONError as e:
+    except PdfToJsonError as e:
         print(f"Error: {e}", file = sys.stderr)
         sys.exit(1)
     except Exception as e:

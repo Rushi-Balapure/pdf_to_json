@@ -13,7 +13,7 @@ from collections import defaultdict
 import logging
 
 from .config import Config
-from .exceptions import PDF2JSONError, PDFProcessingError, InvalidPDFError, FileNotFoundError
+from .exceptions import PdfToJsonError, PDFProcessingError, InvalidPDFError, FileNotFoundError
 
 # Configure logging
 logging.basicConfig(level = getattr(logging, Config.LOG_LEVEL))

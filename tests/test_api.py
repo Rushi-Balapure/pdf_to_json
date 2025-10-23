@@ -1,5 +1,5 @@
 """
-Unit tests for PDF2JSON API functions.
+Unit tests for pdf-to-json API functions.
 """
 
 import pytest
@@ -7,12 +7,12 @@ import tempfile
 import os
 import json
 from unittest.mock import Mock, patch
-from pdf2json import extract_pdf_to_json, extract_pdf_to_dict
-from pdf2json.exceptions import PDF2JSONError, PDFProcessingError, InvalidPDFError, FileNotFoundError
+from pdf_to_json import extract_pdf_to_json, extract_pdf_to_dict
+from pdf_to_json.exceptions import PdfToJsonError, PDFProcessingError, InvalidPDFError, FileNotFoundError
 
 
 class TestAPI:
-    """Test cases for PDF2JSON API functions."""
+    """Test cases for pdf-to-json API functions."""
     
     def test_extract_pdf_to_dict_success(self):
         """Test successful PDF extraction to dictionary."""
@@ -24,7 +24,7 @@ class TestAPI:
             "stats": {"page_count": 1, "processing_time": 1.0}
         }
         
-        with patch('pdf2json.PDFStructureExtractor') as mock_extractor_class:
+        with patch('pdf_to_json.PDFStructureExtractor') as mock_extractor_class:
             mock_extractor = Mock()
             mock_extractor.extract_text_with_structure.return_value = mock_result
             mock_extractor_class.return_value = mock_extractor
@@ -47,7 +47,7 @@ class TestAPI:
     
     def test_extract_pdf_to_dict_processing_error(self):
         """Test error handling for processing errors."""
-        with patch('pdf2json.PDFStructureExtractor') as mock_extractor_class:
+        with patch('pdf_to_json.PDFStructureExtractor') as mock_extractor_class:
             mock_extractor = Mock()
             mock_extractor.extract_text_with_structure.side_effect = PDFProcessingError("Processing failed")
             mock_extractor_class.return_value = mock_extractor
@@ -70,7 +70,7 @@ class TestAPI:
             "stats": {"page_count": 1, "processing_time": 1.0}
         }
         
-        with patch('pdf2json.PDFStructureExtractor') as mock_extractor_class:
+        with patch('pdf_to_json.PDFStructureExtractor') as mock_extractor_class:
             mock_extractor = Mock()
             mock_extractor.extract_text_with_structure.return_value = mock_result
             mock_extractor_class.return_value = mock_extractor
@@ -94,7 +94,7 @@ class TestAPI:
             "stats": {"page_count": 1, "processing_time": 1.0}
         }
         
-        with patch('pdf2json.PDFStructureExtractor') as mock_extractor_class:
+        with patch('pdf_to_json.PDFStructureExtractor') as mock_extractor_class:
             mock_extractor = Mock()
             mock_extractor.extract_text_with_structure.return_value = mock_result
             mock_extractor_class.return_value = mock_extractor
@@ -120,7 +120,7 @@ class TestAPI:
     
     def test_extract_pdf_to_json_processing_error(self):
         """Test error handling for processing errors in JSON extraction."""
-        with patch('pdf2json.PDFStructureExtractor') as mock_extractor_class:
+        with patch('pdf_to_json.PDFStructureExtractor') as mock_extractor_class:
             mock_extractor = Mock()
             mock_extractor.extract_text_with_structure.side_effect = PDFProcessingError("Processing failed")
             mock_extractor_class.return_value = mock_extractor
