@@ -1,5 +1,5 @@
 """
-Setup script for pdf-to-json library.
+Setup script for pdf_to_json library.
 """
 
 import os
@@ -14,7 +14,7 @@ def read_readme():
     if os.path.exists(readme_path):
         with open(readme_path, "r", encoding="utf-8") as f:
             return f.read()
-    return "pdf-to-json - A high-performance PDF to JSON extraction library"
+    return "pdf_to_json - A high-performance PDF to JSON extraction library"
 
 # Read requirements
 def read_requirements():
@@ -28,16 +28,16 @@ def read_requirements():
     return ["pymupdf>=1.24.0"]
 
 setup(
-    name="pdf-to-json",
+    name="pdf_to_json",
     version="1.0.0",
-    author="pdf-to-json Team",
+    author="Rushi Balapure",
     author_email="rishibalapure12@gmail.com",
     description='''
     A high-performance PDF to JSON extraction library with layout-aware text extraction.
     That is optimised for CPU.''',
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/your-username/pdf-to-json",
+    url="https://github.com/your-username/pdf_to_json",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -67,13 +67,13 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "pdf-to-json=pdf_to_json.cli:main",
+            "pdf_to_json=pdf_to_json.cli:main",
         ],
     },
     keywords="pdf json extraction text processing layout analysis",
     project_urls={
-        "Bug Reports": "https://github.com/your-username/pdf-to-json/issues",
-        "Source": "https://github.com/your-username/pdf-to-json",
-        "Documentation": "https://github.com/your-username/pdf-to-json#readme",
+        "Bug Reports": "https://github.com/your-username/pdf_to_json/issues",
+        "Source": "https://github.com/your-username/pdf_to_json",
+        "Documentation": "https://github.com/your-username/pdf_to_json#readme",
     },
 )

@@ -1,5 +1,5 @@
 """
-Unit tests for pdf-to-json extractor.
+Unit tests for pdf_to_json extractor.
 """
 
 import pytest

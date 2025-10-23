@@ -3,16 +3,16 @@ requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pdf-to-json"
+name = "pdf_to_json"
 version = "1.0.0"
 description = "A high-performance PDF to JSON extraction library with layout-aware text extraction"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "pdf-to-json Team", email = "rishibalapure12@gmail.com"}
+    {name = "pdf_to_json Team", email = "rishibalapure12@gmail.com"}
 ]
 maintainers = [
-    {name = "pdf-to-json Team", email = "rishibalapure12@gmail.com"}
+    {name = "pdf_to_json Team", email = "rishibalapure12@gmail.com"}
 ]
 keywords = ["pdf", "json", "extraction", "text", "processing", "layout", "analysis"]
 classifiers = [
@@ -45,13 +45,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/pdf-to-json"
-Documentation = "https://github.com/your-username/pdf-to-json#readme"
-Repository = "https://github.com/your-username/pdf-to-json"
-"Bug Tracker" = "https://github.com/your-username/pdf-to-json/issues"
+Homepage = "https://github.com/your-username/pdf_to_json"
+Documentation = "https://github.com/your-username/pdf_to_json#readme"
+Repository = "https://github.com/your-username/pdf_to_json"
+"Bug Tracker" = "https://github.com/your-username/pdf_to_json/issues"
 
 [project.scripts]
-pdf-to-json = "pdf_to_json.cli:main"
+pdf_to_json = "pdf_to_json.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

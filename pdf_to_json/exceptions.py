@@ -1,9 +1,9 @@
 """
-Custom exceptions for pdf-to-json library.
+Custom exceptions for pdf_to_json library.
 """
 
 class PdfToJsonError(Exception):
-    """Base exception for pdf-to-json library."""
+    """Base exception for pdf_to_json library."""
     pass
 
 class PDFProcessingError(PdfToJsonError):

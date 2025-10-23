@@ -1,5 +1,5 @@
 """
-Unit tests for pdf-to-json API functions.
+Unit tests for pdf_to_json API functions.
 """
 
 import pytest
@@ -12,7 +12,7 @@ from pdf_to_json.exceptions import PdfToJsonError, PDFProcessingError, InvalidPD
 
 
 class TestAPI:
-    """Test cases for pdf-to-json API functions."""
+    """Test cases for pdf_to_json API functions."""
     
     def test_extract_pdf_to_dict_success(self):
         """Test successful PDF extraction to dictionary."""

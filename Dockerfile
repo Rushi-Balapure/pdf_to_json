@@ -1,4 +1,4 @@
-# Multi-stage build for pdf-to-json library
+# Multi-stage build for pdf_to_json library
 FROM python:3.11-slim as builder
 
 # Install system dependencies needed for building
@@ -48,7 +48,7 @@ ENV PYTHONOPTIMIZE=2
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python -c "import pdf_to_json; print('pdf-to-json library ready')" || exit 1
+    CMD python -c "import pdf_to_json; print('pdf_to_json library ready')" || exit 1
 
 # Create a simple CLI script
 RUN echo '#!/usr/bin/env python3\n\
@@ -57,7 +57,7 @@ import pdf_to_json\n\
 import json\n\
 \n\
 if len(sys.argv) != 2:\n\
-    print("Usage: pdf-to-json <pdf_file>")\n\
+    print("Usage: pdf_to_json <pdf_file>")\n\
     sys.exit(1)\n\
 \n\
 try:\n\
@@ -65,8 +65,8 @@ try:\n\
     print(json.dumps(result, indent=2))\n\
 except Exception as e:\n\
     print(f"Error: {e}", file=sys.stderr)\n\
-    sys.exit(1)' > /home/app/pdf-to-json_cli.py && \
-    chmod +x /home/app/pdf-to-json_cli.py
+    sys.exit(1)' > /home/app/pdf_to_json_cli.py && \
+    chmod +x /home/app/pdf_to_json_cli.py
 
 # Entry point
-ENTRYPOINT ["python", "/home/app/pdf-to-json_cli.py"]
+ENTRYPOINT ["python", "/home/app/pdf_to_json_cli.py"]

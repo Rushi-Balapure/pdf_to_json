@@ -1,5 +1,5 @@
 """
-Advanced usage examples for pdf-to-json library.
+Advanced usage examples for pdf_to_json library.
 """
 
 import json
@@ -183,8 +183,8 @@ def example_export_formats():
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    print("pdf-to-json Advanced Examples")
-    print("==========================")
+    print("pdf_to_json Advanced Examples")
+    print("==============================")
     
     # Run advanced examples
     example_batch_processing()

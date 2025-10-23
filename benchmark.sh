@@ -1,8 +1,8 @@
 #!/bin/bash
-# Performance benchmark script for pdf-to-json library
+# Performance benchmark script for pdf_to_json library
 
-echo "pdf-to-json Library Performance Benchmark"
-echo "======================================"
+echo "pdf_to_json Library Performance Benchmark"
+echo "=========================================="
 
 # Create test directory
 mkdir -p benchmark_results
@@ -53,10 +53,10 @@ if [ ! -d "test" ]; then
     exit 1
 fi
 
-# Check if pdf-to-json is installed
+# Check if pdf_to_json is installed
 if ! python3 -c "import pdf_to_json" 2>/dev/null; then
-    echo "Error: pdf-to-json library not installed"
-    echo "Install with: pip install pdf-to-json"
+    echo "Error: pdf_to_json library not installed"
+    echo "Install with: pip install pdf_to_json"
     exit 1
 fi
 

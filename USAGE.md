@@ -1,14 +1,14 @@
-# pdf-to-json Library Usage Examples
+# pdf_to_json Library Usage Examples
 
 ## Installation
 
 ```bash
 # Install from PyPI
-pip install pdf-to-json
+pip install pdf_to_json
 
 # Or install from source
-git clone https://github.com/your-username/pdf-to-json.git
-cd pdf-to-json
+git clone https://github.com/your-username/pdf_to_json.git
+cd pdf_to_json
 pip install -e .
 ```
 
@@ -37,29 +37,29 @@ pdf_to_json.extract_pdf_to_json("document.pdf", "output.json")
 
 ```bash
 # Extract to stdout
-pdf-to-json document.pdf
+pdf_to_json document.pdf
 
 # Save to file
-pdf-to-json document.pdf -o output.json
+pdf_to_json document.pdf -o output.json
 
 # Compact output
-pdf-to-json document.pdf --compact
+pdf_to_json document.pdf --compact
 
 # Pretty print (default)
-pdf-to-json document.pdf --pretty
+pdf_to_json document.pdf --pretty
 ```
 
 ## Docker Usage
 
 ```bash
 # Build the container
-docker build -t pdf-to-json:latest .
+docker build -t pdf_to_json:latest .
 
 # Extract from a single PDF
-docker run --rm -v $(pwd)/pdfs:/pdfs pdf-to-json:latest /pdfs/document.pdf
+docker run --rm -v $(pwd)/pdfs:/pdfs pdf_to_json:latest /pdfs/document.pdf
 
 # Process multiple PDFs with output redirection
-docker run --rm -v $(pwd)/pdfs:/pdfs pdf-to-json:latest /pdfs/document.pdf > output.json
+docker run --rm -v $(pwd)/pdfs:/pdfs pdf_to_json:latest /pdfs/document.pdf > output.json
 ```
 
 ## Batch Processing
@@ -68,7 +68,7 @@ docker run --rm -v $(pwd)/pdfs:/pdfs pdf-to-json:latest /pdfs/document.pdf > out
 # Process all PDFs in a directory
 for pdf in pdfs/*.pdf; do
     echo "Processing: $pdf"
-    pdf-to-json "$pdf" -o "output/$(basename "$pdf" .pdf).json"
+    pdf_to_json "$pdf" -o "output/$(basename "$pdf" .pdf).json"
 done
 ```
 
@@ -113,7 +113,7 @@ chmod +x benchmark.sh
 ./benchmark.sh
 
 # Test with a specific PDF
-time pdf-to-json document.pdf
+time pdf_to_json document.pdf
 ```
 
 ## Expected Output Format
