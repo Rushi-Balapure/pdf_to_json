@@ -1,5 +1,5 @@
 """
-Basic usage examples for pdf-to-json library.
+Basic usage examples for pdf_to_json library.
 """
 
 import sys
@@ -88,13 +88,13 @@ def example_error_handling():
     except InvalidPDFError:
         print("[OK] Correctly caught: Invalid PDF")
     except PdfToJsonError as e:
-        print(f"[OK] Correctly caught: pdf-to-json error - {e}")
+        print(f"[OK] Correctly caught: pdf_to_json error - {e}")
     except Exception as e:
         print(f"[FAIL] Unexpected error: {e}")
 
 if __name__ == "__main__":
-    print("pdf-to-json Examples")
-    print("=================")
+    print("pdf_to_json Examples")
+    print("====================")
     
     # Run examples
     example_basic_extraction()

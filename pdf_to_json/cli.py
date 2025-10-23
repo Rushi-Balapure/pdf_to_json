@@ -1,5 +1,5 @@
 """
-Command-line interface for pdf-to-json library.
+Command-line interface for pdf_to_json library.
 """
 
 import argparse
@@ -19,10 +19,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  pdf-to-json document.pdf                    # Extract to stdout
-  pdf-to-json document.pdf -o output.json    # Save to file
-  pdf-to-json document.pdf --pretty          # Pretty print JSON
-  pdf-to-json document.pdf --compact         # Compact JSON output
+  pdf_to_json document.pdf                    # Extract to stdout
+  pdf_to_json document.pdf -o output.json    # Save to file
+  pdf_to_json document.pdf --pretty          # Pretty print JSON
+  pdf_to_json document.pdf --compact         # Compact JSON output
         """
     )
     
@@ -51,7 +51,7 @@ Examples:
     parser.add_argument(
         "--version",
         action = "version",
-        version = "pdf-to-json 1.0.0"
+        version = "pdf_to_json 1.0.0"
     )
     
     args = parser.parse_args()

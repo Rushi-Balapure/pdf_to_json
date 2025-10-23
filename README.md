@@ -1,10 +1,10 @@
-# pdf-to-json
+# pdf_to_json
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
-[![PyPI Version](https://img.shields.io/pypi/v/pdf-to-json.svg)](https://pypi.org/project/pdf-to-json/)
+[![PyPI Version](https://img.shields.io/pypi/v/pdf_to_json.svg)](https://pypi.org/project/pdf_to_json/)
 
-A high-performance Python library for extracting structured content from PDF documents with layout-aware text extraction. pdf-to-json preserves document structure including headings (H1-H6) and body text, outputting clean JSON format.
+A high-performance Python library for extracting structured content from PDF documents with layout-aware text extraction. pdf_to_json preserves document structure including headings (H1-H6) and body text, outputting clean JSON format.
 
 ## Features
 
@@ -19,7 +19,7 @@ A high-performance Python library for extracting structured content from PDF doc
 ## Installation
 
 ```bash
-pip install pdf-to-json
+pip install pdf_to_json
 ```
 
 ## Quick Start
@@ -46,16 +46,16 @@ pdf_to_json.extract_pdf_to_json("document.pdf", "output.json")
 
 ```bash
 # Extract to stdout
-pdf-to-json document.pdf
+pdf_to_json document.pdf
 
 # Save to file
-pdf-to-json document.pdf -o output.json
+pdf_to_json document.pdf -o output.json
 
 # Compact output
-pdf-to-json document.pdf --compact
+pdf_to_json document.pdf --compact
 
 # Pretty print (default)
-pdf-to-json document.pdf --pretty
+pdf_to_json document.pdf --pretty
 ```
 
 ## JSON Output Format
@@ -134,7 +134,7 @@ except PdfToJsonError as e:
 
 ## Configuration Options
 
-You can configure pdf-to-json using environment variables:
+You can configure pdf_to_json using environment variables:
 
 ```bash
 # Font analysis settings
@@ -165,13 +165,13 @@ export PDF_TO_JSON_LOG_LEVEL=INFO
 ### Installation from Source
 
 ```bash
-pip install pdf-to-json
+pip install pdf_to_json
 ```
 or
 
 ```bash
-git clone https://github.com/your-username/pdf-to-json.git
-cd pdf-to-json
+git clone https://github.com/your-username/pdf_to_json.git
+cd pdf_to_json
 pip install -e .
 ```
 
@@ -196,15 +196,15 @@ pytest
 
 ```bash
 # Build Docker image
-docker build -t pdf-to-json:latest .
+docker build -t pdf_to_json:latest .
 
 # Run with Docker
-docker run --rm -v $(pwd)/test:/test pdf-to-json:latest /test/document.pdf
+docker run --rm -v $(pwd)/test:/test pdf_to_json:latest /test/document.pdf
 ```
 
 ## Performance
 
-pdf-to-json is optimized for high performance:
+pdf_to_json is optimized for high performance:
 
 - **CPU-only processing**: No GPU requirements
 - **Memory efficient**: Processes large documents without excessive memory usage
@@ -215,7 +215,7 @@ pdf-to-json is optimized for high performance:
 
 ## Supported Languages
 
-pdf-to-json supports text extraction from PDFs containing:
+pdf_to_json supports text extraction from PDFs containing:
 
 - Latin scripts (English, Spanish, French, German, etc.)
 - Cyrillic scripts (Russian, Bulgarian, Serbian, etc.)
@@ -245,5 +245,5 @@ Published in Source Code for Biology and Medicine (2012)
 For questions, issues, or contributions:
 
 - 📧 Email: rishibalapure12@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/pdf-to-json/issues)
-- 📖 Documentation: [GitHub Wiki](https://github.com/your-username/pdf-to-json/wiki)
+- 🐛 Issues: [GitHub Issues](https://github.com/your-username/pdf_to_json/issues)
+- 📖 Documentation: [GitHub Wiki](https://github.com/your-username/pdf_to_json/wiki)

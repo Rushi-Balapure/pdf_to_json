@@ -1,3 +1,3 @@
 """
-Test package for pdf-to-json library.
+Test package for pdf_to_json library.
 """

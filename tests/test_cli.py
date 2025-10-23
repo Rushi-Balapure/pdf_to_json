@@ -1,5 +1,5 @@
 """
-Unit tests for pdf-to-json CLI.
+Unit tests for pdf_to_json CLI.
 """
 
 import pytest
@@ -12,7 +12,7 @@ from pdf_to_json.exceptions import PdfToJsonError
 
 
 class TestCLI:
-    """Test cases for pdf-to-json CLI."""
+    """Test cases for pdf_to_json CLI."""
     
     def test_cli_help(self, capsys):
         """Test CLI help output."""
@@ -34,7 +34,7 @@ class TestCLI:
         
         try:
             # Mock sys.argv to simulate command line arguments
-            with patch('sys.argv', ['pdf-to-json', tmp_path]):
+            with patch('sys.argv', ['pdf_to_json', tmp_path]):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout
@@ -61,7 +61,7 @@ class TestCLI:
         
         try:
             # Mock sys.argv to simulate command line arguments
-            with patch('sys.argv', ['pdf-to-json', pdf_path, '-o', json_path]):
+            with patch('sys.argv', ['pdf_to_json', pdf_path, '-o', json_path]):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that success message was printed
@@ -77,7 +77,7 @@ class TestCLI:
     
     def test_cli_file_not_found(self):
         """Test CLI error handling for non-existent file."""
-        with patch('sys.argv', ['pdf-to-json', 'nonexistent.pdf']):
+        with patch('sys.argv', ['pdf_to_json', 'nonexistent.pdf']):
             with patch('sys.stderr') as mock_stderr:
                 with pytest.raises(SystemExit):
                     main()
@@ -94,7 +94,7 @@ class TestCLI:
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf-to-json', tmp_path]):
+            with patch('sys.argv', ['pdf_to_json', tmp_path]):
                 with patch('sys.stderr') as mock_stderr:
                     with pytest.raises(SystemExit):
                         main()
@@ -116,7 +116,7 @@ class TestCLI:
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf-to-json', tmp_path, '--compact']):
+            with patch('sys.argv', ['pdf_to_json', tmp_path, '--compact']):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout
@@ -135,7 +135,7 @@ class TestCLI:
             tmp_path = tmp.name
         
         try:
-            with patch('sys.argv', ['pdf-to-json', tmp_path, '--pretty']):
+            with patch('sys.argv', ['pdf_to_json', tmp_path, '--pretty']):
                 with patch('sys.stdout') as mock_stdout:
                     main()
                     # Verify that JSON was written to stdout

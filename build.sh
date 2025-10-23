@@ -1,7 +1,7 @@
 #!/bin/bash
-# Build script for PDF2JSON library
+# Build script for pdf_to_json library
 
-echo "Building PDF2JSON library..."
+echo "Building pdf_to_json library..."
 
 # Clean previous builds
 echo "Cleaning previous builds..."
