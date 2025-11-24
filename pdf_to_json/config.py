@@ -4,7 +4,8 @@ Allows fine-tuning of extraction parameters.
 """
 
 import os
-from typing import Dict, Any
+from typing import Any, Dict
+
 
 class Config:
     """Configuration class for pdf_to_json library."""

@@ -93,11 +93,11 @@ result = extractor.extract_text_with_structure("document.pdf")
 
 ```python
 from pdf_to_json import extract_pdf_to_dict
-from pdf_to_json.exceptions import PdfToJsonError, InvalidPDFError, FileNotFoundError
+from pdf_to_json.exceptions import PdfToJsonError, InvalidPDFError, PDFFileNotFoundError
 
 try:
     result = extract_pdf_to_dict("document.pdf")
-except FileNotFoundError:
+except PDFFileNotFoundError:
     print("PDF file not found")
 except InvalidPDFError:
     print("Invalid or corrupted PDF file")

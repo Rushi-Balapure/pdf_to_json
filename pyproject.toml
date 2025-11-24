@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -21,7 +21,6 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -39,8 +38,6 @@ dependencies = [
 dev = [
     "pytest>=6.0",
     "pytest-cov>=2.0",
-    "black>=21.0",
-    "flake8>=3.8",
     "mypy>=0.800",
 ]
 
@@ -57,23 +54,25 @@ pdf_to_json = "pdf_to_json.cli:main"
 where = ["."]
 include = ["pdf_to_json*"]
 
-[tool.black]
-line-length = 88
-target-version = ['py38']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
+[tool.ruff]
+exclude = [
+    ".env",
+    ".venv",
+    "**/migrations/**",
+]
+lint.ignore = [
+    "E501",  # line too long
+    "F403",  # 'from module import *' used; unable to detect undefined names
+    "E701",  # multiple statements on one line (colon)
+    "F401",  # module imported but unused
+]
+line-length = 120
+lint.select = [
+    "I",
+    "E",
+    "F",
+    "W",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -2,18 +2,17 @@
 PDF structure extractor with layout-aware text extraction.
 """
 
-import json
-import io
+import logging
 import os
 import time
-from typing import Dict, List, Any, Optional
-import pymupdf as fitz  # PyMuPDF
-from dataclasses import dataclass
 from collections import defaultdict
-import logging
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
+import pymupdf as fitz  # PyMuPDF
 
 from .config import Config
-from .exceptions import PdfToJsonError, PDFProcessingError, InvalidPDFError, FileNotFoundError
+from .exceptions import InvalidPDFError, PDFFileNotFoundError, PDFProcessingError
 
 # Configure logging
 logging.basicConfig(level = getattr(logging, Config.LOG_LEVEL))
@@ -43,7 +42,7 @@ class PDFStructureExtractor:
     def __init__(self, config: Optional[Config] = None):
         """
         Initialize the PDF structure extractor.
-        
+
         Args:
             config (Config, optional): Configuration object. If None, uses default config.
         """
@@ -57,7 +56,7 @@ class PDFStructureExtractor:
         total_chars = 0
 
         max_pages = min(len(doc), self.config.MAX_PAGES_FOR_FONT_ANALYSIS)
-        
+
         for page_num in range(max_pages):
             blocks = doc[page_num].get_text("dict").get("blocks", [])
             for block in blocks:
@@ -163,22 +162,22 @@ class PDFStructureExtractor:
         """
         Extract text with hierarchical structure from PDF.
         Returns JSON format with title and outline.
-        
+
         Args:
             pdf_path (str): Path to the PDF file
-            
+
         Returns:
             Dict[str, Any]: Dictionary containing extracted PDF structure
-            
+
         Raises:
-            FileNotFoundError: If PDF file doesn't exist
+            PDFFileNotFoundError: If PDF file doesn't exist
             InvalidPDFError: If PDF file is corrupted
             PDFProcessingError: If processing fails
         """
         start_time = time.time()
 
         if not os.path.exists(pdf_path):
-            raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+            raise PDFFileNotFoundError(f"PDF file not found: {pdf_path}")
 
         try:
             doc = fitz.open(pdf_path)

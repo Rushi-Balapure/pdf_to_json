@@ -17,15 +17,17 @@ __version__ = "1.0.0"
 __author__ = "Rushi Balapure"
 __email__ = "rishibalapure12@gmail.com"
 
-from .extractor import PDFStructureExtractor
+import json
+
 from .config import Config
-from .exceptions import PdfToJsonError, PDFProcessingError, InvalidPDFError
+from .exceptions import InvalidPDFError, PDFProcessingError, PdfToJsonError
+from .extractor import PDFStructureExtractor
 
 __all__ = [
     "PDFStructureExtractor",
-    "Config", 
+    "Config",
     "PdfToJsonError",
-    "PDFProcessingError", 
+    "PDFProcessingError",
     "InvalidPDFError",
     "extract_pdf_to_json",
     "extract_pdf_to_dict"
@@ -34,40 +36,38 @@ __all__ = [
 def extract_pdf_to_json(pdf_path: str, output_path: str = None) -> str:
     """
     Extract PDF content to JSON string.
-    
+
     Args:
         pdf_path (str): Path to the PDF file
         output_path (str, optional): Path to save JSON output. If None, returns JSON string.
-        
+
     Returns:
         str: JSON string if output_path is None, otherwise saves to file and returns path
-        
+
     Raises:
         PdfToJsonError: If PDF processing fails
     """
     extractor = PDFStructureExtractor()
     result = extractor.extract_text_with_structure(pdf_path)
-    
-    import json
+
     json_str = json.dumps(result, ensure_ascii = False, indent = 2)
-    
+
     if output_path:
         with open(output_path, 'w', encoding = 'utf-8') as f:
             f.write(json_str)
         return output_path
-    
     return json_str
 
 def extract_pdf_to_dict(pdf_path: str) -> dict:
     """
     Extract PDF content to Python dictionary.
-    
+
     Args:
         pdf_path (str): Path to the PDF file
-        
+
     Returns:
         dict: Dictionary containing extracted PDF structure
-        
+
     Raises:
         PdfToJsonError: If PDF processing fails
     """

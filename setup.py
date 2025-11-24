@@ -3,7 +3,9 @@ Setup script for pdf_to_json library.
 """
 
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
+
 
 # Read the README file
 def read_readme():
