@@ -2,10 +2,12 @@
 Pytest configuration and fixtures for pdf_to_json tests.
 """
 
-import pytest
-import tempfile
 import os
+import tempfile
 from unittest.mock import Mock
+
+import pytest
+
 
 @pytest.fixture
 def sample_pdf():
@@ -14,9 +16,9 @@ def sample_pdf():
         # Write minimal PDF content (this is not a real PDF, just for testing)
         tmp.write(b"%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n")
         tmp_path = tmp.name
-    
+
     yield tmp_path
-    
+
     # Cleanup
     if os.path.exists(tmp_path):
         os.unlink(tmp_path)
@@ -68,7 +70,7 @@ def mock_document():
     """Mock PyMuPDF document for testing."""
     mock_doc = Mock()
     mock_doc.__len__ = Mock(return_value=2)
-    
+
     # Mock page
     mock_page = Mock()
     mock_page.get_text.return_value = {
@@ -85,6 +87,6 @@ def mock_document():
             }
         ]
     }
-    
+
     mock_doc.__getitem__ = Mock(return_value=mock_page)
     return mock_doc
