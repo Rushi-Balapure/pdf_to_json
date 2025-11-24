@@ -1,4 +1,6 @@
 name: pdf_to_json linters.yml
+permissions:
+  contents: read
 
 on: [push, pull_request]
 
